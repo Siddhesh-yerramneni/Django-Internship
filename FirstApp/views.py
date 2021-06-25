@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponse, request
 from FirstApp.models import Register
 # Create your views here.
@@ -91,3 +91,25 @@ def register2(req):
 def display(req):
     data=Register.objects.all()
     return render(req,'html/display1.html',{'data':data})
+
+def sview(request,y):
+    w = Register.objects.get(id=y)
+    return render(request,'html/sview.html',{'y':w})
+
+def supt(request,q):
+    t=Register.objects.get(id=q)
+    if request.method=="POST":
+        na=request.POST['n']
+        em=request.POST['e']
+        t.name=na
+        t.email=em
+        t.save()
+        return redirect('/display')
+    return render(request,'html/supdate.html',{'p':t})
+
+def sdel(request,z):
+    b=Register.objects.get(id=z)
+    if request.method=="POST":
+        b.delete()
+        return redirect('/display')
+    return render(request,'html/sndlt.html',{'a':b})

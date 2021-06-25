@@ -34,5 +34,8 @@ urlpatterns = [
     path('reg/',views.register, name='Register'),
     path('login/',views.log,name='login'),
     path('reg2/',views.register2,name='register2'),
-    path('display/',views.display),
+    path('display/',views.display,name="dt"),
+    path('viw/<int:y>/',views.sview,name="sv"),
+    path('upu/<int:q>/',views.supt,name="sup"),
+    path('del/<int:z>/',views.sdel,name="sdel"),
 ]
