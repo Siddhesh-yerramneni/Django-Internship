@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, request
+from FirstApp.models import Register
 # Create your views here.
 def home(request):
     return HttpResponse("Hello World")
@@ -78,3 +79,15 @@ def log(req):
             return HttpResponse("<h3><script>alert('Invalid')</script></h3>")
     
     return render(req,'html/login.html')
+
+def register2(req):
+    if req.method=="POST":
+        name=req.POST['name']
+        email=req.POST['email']
+        reg= Register(name = name, email = email)
+        reg.save()
+    return render(req,'html/register2.html')
+
+def display(req):
+    data=Register.objects.all()
+    return render(req,'html/display1.html',{'data':data})
