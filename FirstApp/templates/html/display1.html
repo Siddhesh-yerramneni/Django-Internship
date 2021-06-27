@@ -25,9 +25,9 @@
                         <td>{{row.name}}</td>
                         <td>{{row.email}}</td>
                         <td>
-                            <a href="{% url 'sv' row.id %}" class="btn btn-outline-primary mx-1">View</a>
-                            <a href="{% url 'sup' row.id %}" class="btn btn-outline-success mx-1">Update</a>
-                            <a href="{% url 'sdel' row.id %}" class="btn btn-outline-danger mx-1">Delete</a>
+                            <a href="{% url 'sv' row.id %}" class="btn btn-outline-primary mx-2">View</a>
+                            <a href="{% url 'sup' row.id %}" class="btn btn-outline-success mx-2">Update</a>
+                            <a href="{% url 'sdel' row.id %}" class="btn btn-outline-danger mx-2">Delete</a>
                         </td>
                     </tr>
                     {% endfor %}
