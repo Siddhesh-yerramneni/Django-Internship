@@ -1,12 +1,13 @@
-from Restaurant_app.models import Restaurents
+from Restaurant_app.models import Restaurents, Itemlist
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
-from Restaurant_app.forms import ReForm
+from Restaurant_app.forms import ItemsForm, ReForm, usgform
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def home(request):
-    w = Restaurents.objects.all()
+    w = Restaurents.objects.filter(uid_id=request.user.id)
     return render(request,'app/homee.html',{'c':w})
 
 def about(request):
@@ -18,12 +19,15 @@ def contact(request):
 def login(request):
     return render(request,'app/login.html')
 
+@login_required
 def reslist(request):
-    y = Restaurents.objects.all()
+    y = Restaurents.objects.filter(uid_id=request.user.id)
     if request.method == "POST":
         t = ReForm(request.POST,request.FILES)
         if t.is_valid():
-            t.save()
+            c = t.save(commit=False)
+            c.uid_id = request.user.id
+            c.save()
             messages.success(request,"Restaurant added Successfully")
             return redirect('/rlist')
     t = ReForm()
@@ -52,3 +56,51 @@ def rstdel(request,m):
 def rstvw(request,a):
     s = Restaurents.objects.get(id=a)
     return render(request,'app/restview.html',{'z':s})
+
+@login_required
+def itlist(request):
+    st =list(Restaurents.objects.filter(uid_id=request.user.id))
+    mm=Itemlist.objects.all()
+    d,i={},0
+    for mp in mm:
+        for h in st:
+            if h.id == mp.rsid_id:
+                d[i] = mp.iname, mp.icategory,mp.price,mp.iimage,mp.iavail,mp.id,h.Rname
+                i = i+1
+    if request.method == "POST":
+        k=ItemsForm(request.POST,request.FILES)
+        if k.is_valid():
+            n=k.save(commit=False)
+            n.save()
+            messages.success(request,'Item added')
+            return redirect('/ilist/')
+    k=ItemsForm()        
+    return render(request,'app/itmlist.html',{'r':k,'er':st, 's':d.values()})
+
+def itemupdate(request,n):
+    a=Itemlist.objects.get(id=n)
+    if request.method=="POST":
+        s=ItemsForm(request.POST,request.FILES,instance=a)
+        if s.is_valid():
+            s.save()
+            return redirect('/ilist')
+    s=ItemsForm(instance=a)
+    return render(request,'app/update.html',{'y':s})
+
+def itdel(request,m):
+    r=Itemlist.objects.get(id=m)
+    if request.method=="POST":
+        r.delete()
+        messages.success(request,"{} Restaurent Deleted Successfully".format(r.iname))
+        return redirect('/ilist')
+    e=ItemsForm(instance=r)
+    return render(request,'app/itdel.html',{'a':e})
+
+def usrreg(request):
+    if request.method == "POST":
+        d = usgform(request.POST)
+        if d.is_valid():
+            d.save()
+            return redirect('/login')
+    d=usgform()
+    return render(request,'app/userregister.html',{'t':d})

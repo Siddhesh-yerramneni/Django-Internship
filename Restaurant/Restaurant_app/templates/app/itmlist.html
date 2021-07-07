@@ -1,0 +1,85 @@
+{% extends 'app/base.html' %}
+{% block title %} Items list {% endblock %}
+{% block content %}
+<div class="container-fluid mt-4">
+    {% if messages %}
+    {% for m in messages %}
+    <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{m}}
+      </div>
+      {% endfor %}
+      {% endif %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="card col col-md-4 mx-2">
+            <div class="card-body">
+                <h3 class="bg-info text-light border rounded text-center p-2">Add Items</h3>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for n in r %}
+                    {% if forloop.counter == 1 %}
+                    <select class="form-control my-2" name="rsid">
+                        {% for j in er %}
+                        <option value="{{j.id}}">{{j.Rname}}</option>
+                        {% endfor %}
+                    </select>
+                    {% elif forloop.counter >= 2 %}
+                    <div>{{n}}</div>
+                    {% endif %}
+                    {% endfor %}
+                    <div class="row">
+                        <div class="col">
+                            <input type="reset" value="Reset" class="btn btn-outline-danger my-2">
+                        </div>
+                        <div class="col">
+                            <input type="submit" value="Create Item" class="btn btn-outline-success my-2 form-control">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card col-md">
+            <div class="card-body">
+                <h3 class="bg-warning text-light text-center border rounded shadow-lg p-2">List of Items</h3>
+                <table class="table table-borderless table-hover">
+                    <tr class="bg-dark text-light">
+                        <th>S.No</th>
+                        <th>Restaurant Name</th>
+                        <th>Item Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Availability</th>
+                        <th>Actions</th>
+                    </tr>
+                    {% for u in s %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{u.6}}</td>
+                        <td>{{u.0}}</td>
+                        <td>
+                            {% if u.1 == 'Veg' %}
+                            <span class="badge badge-success">Vegetarian</span>
+                            {% else%}
+                            <span class="badge badge-danger">Non-Vegetarian</span>
+                            {% endif %}
+                        </td>
+                        <td>{{u.2}}</td>
+                        <td>
+                            {% if u.4 == 'Available' %}
+                            <span class="badge badge-success">Available</span>
+                            {% else%}
+                            <span class="badge badge-danger">Not-Available</span>
+                            {% endif %}
+                        </td>
+                        <td><a href="{% url 'iup' u.5 %}" class="btn btn-outline-info mx-1">Update</a>
+                            <a href="{% url 'idel' u.5 %}" class="btn btn-outline-success mx-1">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

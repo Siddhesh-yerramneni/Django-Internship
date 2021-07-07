@@ -10,6 +10,7 @@
     <!-- Navbar links -->
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav">
+            {% if not user.is_authenticated %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'hm' %}">Home</a>
             </li>
@@ -20,13 +21,30 @@
                 <a class="nav-link" href="{% url 'ct' %}">Contact us</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="{% url 'reg' %}">Registration</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'hm' %}">Home</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="{% url 'rstl' %}">Restaurant List</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'itl' %}">Items List</a>
+            </li>
+            {% endif %}
         </ul>
         <ul class="navbar-nav ml-auto">
+            {% if not user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link float-right" href="{% url 'log' %}">Login</a>
+                <a class="nav-link float-right" href="{% url 'lg' %}">Login</a>
             </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link float-right" href="{% url 'lgo' %}">Logout</a>
+            </li>
+            {% endif %}
         </ul>
     </div>
 </nav>

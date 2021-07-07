@@ -123,6 +123,9 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/images/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'Restaurant_app/static/images/')
+
+LOGIN_URL = 'lg'
+LOGIN_REDIRECT_URL = 'hm'
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
