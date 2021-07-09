@@ -126,7 +126,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'Restaurant_app/static/images/')
 
 LOGIN_URL = 'lg'
 LOGIN_REDIRECT_URL = 'hm'
+
+AUTH_USER_MODEL = 'Restaurant_app.User'
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'siddhesh.yerramneni@gmail.com'
+EMAIL_HOST_PASSWORD ='target15lpa'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

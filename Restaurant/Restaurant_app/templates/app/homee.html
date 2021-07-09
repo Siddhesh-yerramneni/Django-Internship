@@ -3,6 +3,7 @@
 {% block title %}Home{% endblock %} 
 {% block content %}
 <div class="container-fluid">
+    {% if user.role == 2 %}
     <div class="row mx-3 mt-3">
         <div class="col-md-7">
             <h3>carousel</h3>
@@ -35,5 +36,18 @@
         </div>
         {% endfor %}
     </div>
+    {% elif user.is_superuser %}
+    <div class="jumbotron col-md-6 mx-auto shadow-lg mt-4">
+        <h3>You are admin</h3>
+    </div>
+    {% elif user.role == 3 %}
+    <div class="jumbotron col-md-6 mx-auto shadow-lg mt-4">
+        <h3>You are User</h3>
+    </div>
+    {% else %}
+    <div class="card jumbotron col-md-6 mx-auto shadow-lg mt-4">
+        <h3>You are in Guest role</h3>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

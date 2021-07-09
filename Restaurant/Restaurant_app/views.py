@@ -1,10 +1,12 @@
-from Restaurant_app.models import Restaurents, Itemlist
+from Restaurant_app.models import Restaurents, Itemlist, Rolereq, User
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
-from Restaurant_app.forms import ItemsForm, ReForm, usgform
+from Restaurant_app.forms import ItemsForm, ReForm, Rlupd, usgform, Rltype
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from Restaurant import settings
 # Create your views here.
 def home(request):
     w = Restaurents.objects.filter(uid_id=request.user.id)
@@ -104,3 +106,62 @@ def usrreg(request):
             return redirect('/login')
     d=usgform()
     return render(request,'app/userregister.html',{'t':d})
+
+@login_required
+def rolereq(request):
+    p = Rolereq.objects.filter(ud_id=request.user.id).count()
+    if request.method == "POST":
+        k = Rltype(request.POST,request.FILES)
+        if k.is_valid():
+            y = k.save(commit=False)
+            y.ud_id = request.user.id
+            y.uname = request.user.username
+            y.is_checked = 0
+            print(y)
+            y.save()
+            # return redirect('/')
+    k = Rltype()
+    return render(request,'app/rolereq.html',{'d':k, 'c':p})
+
+@login_required
+def gveperm(request):
+    u = User.objects.all()
+    r = Rolereq.objects.all()
+    d={}
+    for n in u:
+        for m in r:
+            if n.is_superuser == 1 or n.id != m.ud_id :
+                continue
+            else:
+                d[m.id] = m.Uname, m.rltype, n.role,n.id
+    return render(request,'app/gvpl.html',{'h':d.values()})
+
+@login_required
+def gvupd(request,t):
+    y = Rolereq.objects.get(ud_id=t)
+    d = User.objects.get(id=t)
+    if request.method == "POST":
+        n = Rlupd(request.POST,instance=d)
+        if n.is_valid():
+            n.save()
+            y.is_checked = 1
+            y.save()
+            return redirect('/gvper')
+    n = Rlupd(instance=d)
+    return render(request,'app/gvepermission.html',{'c':n})
+
+@login_required
+def pfle(request):
+    return render(request,'app/profile.html')
+
+@login_required
+def feedback(request):
+    if request.method == "POST":
+        sd = request.POST['snmail'].split(',')
+        sm = request.POST['sub']
+        mg = request.POST['msg']
+        rt = settings.EMAIL_HOST_USER
+        dt = send_mail(sm,mg,rt,sd)
+        if dt == 1:
+            return redirect('/')
+    return render(request,'app/feedback.html')

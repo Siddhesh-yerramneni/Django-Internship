@@ -17,4 +17,9 @@ urlpatterns = [
     path('rg/',views.usrreg,name="reg"),
     path('login/',v.LoginView.as_view(template_name="app/login.html"),name="lg"),
     path('logout',v.LogoutView.as_view(template_name="app/logout.html"),name="lgo"),
+    path('roletype/',views.rolereq,name="rlrq"),
+    path('gvper/',views.gveperm,name="gvpm"),
+    path('gvup/<int:t>/',views.gvupd,name="gvup"),
+    path('pfle/',views.pfle,name="pf"),
+    path('fbd',views.feedback,name="fd"),
 ]

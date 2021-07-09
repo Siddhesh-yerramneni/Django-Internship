@@ -23,7 +23,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'reg' %}">Registration</a>
             </li>
-            {% else %}
+            {% elif user.role == 2  %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'hm' %}">Home</a>
             </li>
@@ -33,6 +33,30 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'itl' %}">Items List</a>
             </li>
+            {% elif user.is_superuser %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'hm' %}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'gvpm' %}">Permissions</a>
+            </li>
+            {% elif user.role == 3 %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'hm' %}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Order</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'fd' %}">Feedback</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'hm' %}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'rlrq' %}">Role request</a>
+            </li>
             {% endif %}
         </ul>
         <ul class="navbar-nav ml-auto">
@@ -41,9 +65,21 @@
                 <a class="nav-link float-right" href="{% url 'lg' %}">Login</a>
             </li>
             {% else %}
-            <li class="nav-item">
-                <a class="nav-link float-right" href="{% url 'lgo' %}">Logout</a>
-            </li>
+            <div class="dropdown">
+                <li  class="nav-link dropdown-toggle" data-toggle="dropdown">
+                    Welcome {% if user.role == 3 %}
+                    <span>User</span>
+                    {% elif user.role == 2 %}
+                    <span>Manager</span>
+                    {% endif %}
+                    {{request.user.username}}
+                </li>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="{% url 'pf' %}">Profile</a>
+                  <a class="dropdown-item" href="#">Change Password</a>
+                  <a class="dropdown-item" href="{% url 'lgo' %}">Logout</a>
+                </div>
+              </div>
             {% endif %}
         </ul>
     </div>

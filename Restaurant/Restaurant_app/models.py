@@ -1,6 +1,22 @@
+
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 # Create your models here.
+
+class User(AbstractUser):
+    age = models.IntegerField(default=20)
+    mobilenumber = models.CharField(max_length=10,null=True)
+    uimg = models.ImageField(upload_to='Profilepics/', default = 'logo.png')
+    t = [(1,'Guest'),(2,'Manager'),(3,'User')]
+    role = models.IntegerField(choices=t,default=1)
+
+class Rolereq(models.Model):
+    f = [(2,'Manager'),(3,'User')]
+    rltype = models.IntegerField(choices=f)
+    pfe = models.ImageField(upload_to='Rolepics/',default = "logo.png")
+    is_checked = models.BooleanField(default=False)
+    Uname = models.CharField(max_length=50)
+    ud = models.OneToOneField(User,on_delete=models.CASCADE)
 
 
 class Restaurents(models.Model):

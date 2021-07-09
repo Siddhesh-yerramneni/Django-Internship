@@ -1,8 +1,8 @@
 from django import forms
 from django.db.models.base import Model
 from django.forms import ModelForm, fields, widgets
-from Restaurant_app.models import Restaurents, Itemlist
-from django.contrib.auth.models import User
+from Restaurant_app.models import Restaurents, Itemlist, Rolereq, User
+# from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
 class ReForm(ModelForm):
@@ -72,5 +72,34 @@ class usgform(UserCreationForm):
             "username":forms.TextInput(attrs={
                 "class":"form-control my-2",
                 "placeholder":"Enter Username",
+            }),
+        }
+
+
+class Rltype(forms.ModelForm):
+    class Meta:
+        model = Rolereq
+        fields= ["Uname","rltype","pfe"]
+        widgets= {
+            # "uname":forms.TextInput(attrs={
+            #     "class":"form-control my-2",
+            #     "readonly":True,
+            # }),
+            "rltype":forms.Select(attrs={
+                "class":"form-control my-2"
+            })
+        }
+
+class Rlupd(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["username","role"]
+        widgets = {
+            "username":forms.TextInput(attrs={
+                "class":"form-control my-2",
+                "readonly":True,
+            }),
+            "role":forms.Select(attrs={
+                "class":"form-control my-2",
             }),
         }
